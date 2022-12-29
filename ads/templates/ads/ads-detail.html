@@ -1,0 +1,112 @@
+{% extends "base.html" %}
+{% block content %}
+<!-- Page Header Start -->
+<div class="page-header" style="background: url('img/banner1.jpg');">
+    <div style="margin-bottom:20px;"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="breadcrumb-wrapper">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <div class="details-box ads-details-wrapper">
+                {% if ads_photos.count > 1 %}
+                <div id="carousel-example-1z" class="carousel slide carousel-fade" data-ride="carousel">
+                    <ol class="carousel-indicators">
+                        {% for p in ads_photos %}
+                        <li data-target="#carousel-example-1z" data-slide-to="{{ forloop.counter0 }}"
+                            class="{% if forloop.counter0 == 0 %} active {% endif %}"></li>
+                        {% endfor %}
+                    </ol>
+                    <div class="carousel-inner" role="listbox">
+                        {% for p in ads_photos %}
+                        <div class="carousel-item {% if forloop.counter0 == 0 %} active {% endif %}">
+                            <img class="d-block w-100" src="{{p.image.url}}" alt="First slide">
+                        </div>
+                        {% endfor %}
+                        <a class="carousel-control-prev" href="#carousel-example-1z" role="button" data-slide="prev">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Poprzednie</span>
+                        </a>
+                        <a class="carousel-control-next" href="#carousel-example-1z" role="button" data-slide="next">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="sr-only">Następne</span>
+                        </a>
+                    </div>
+                </div>
+                {% else %}
+                {% for p in ads_photos %}
+                {% if forloop.first %}
+                <img class="img-fluid" src="{{ p.image.url }}" alt="">
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+            </div>
+
+        </div>
+        <div class="col-6">
+            <div class="ads-details-info">
+                <h2>{{ ads_detail.title }}</h2>
+                <div class="details-meta">
+                    <span><i class="lni-alarm-clock"></i> Dodane: {{ ads_detail.date_created }}</span>
+                </div>
+            </div>
+            <ul class="advertisement mb-4">
+                <li>
+                    <p>
+                        <strong><i class="lni-user"></i> Sprzedający:</strong> {{ ads_detail.author.user }}
+                        <a class="link-small" href="{% url 'author-archive' ads_detail.author.pk %}">Zobacz ogłoszenia
+                            tego użytkownika</a>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <strong><i class="lni-map-marker"></i> Województwo:</strong> {{ ads_detail.state }}
+                        <a class="link-small" href="{% url 'state-archive' ads_detail.state.slug %}">Zobacz ogłoszenia w
+                            tym województwie</a>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <strong><i class="lni-map"></i> Miasto:</strong> {{ ads_detail.city }}
+                        <a class="link-small" href="{% url 'city-archive' ads_detail.city.slug %}">Zobacz ogłoszenia w
+                            tym mieście</a>
+                    </p>
+                </li>
+                <li>
+                    <p>
+                        <strong><i class="lni-folder"></i> Kategoria:</strong> {{ ads_detail.category }}
+                        <a class="link-small" href="{% url 'category-archive' ads_detail.category.slug %}">Zobacz
+                            ogłoszenia z tej kategorii</a>
+                    </p>
+                </li>
+                <li>
+                    <p><strong><i class="lni-archive"></i> Stan:</strong> {{ ads_detail.condition }}</p>
+                </li>
+                <li>
+                    <p><strong><i class="lni-package"></i> Marka:</strong> {{ ads_detail.brand }}</p>
+                </li>
+            </ul>
+            <div class="ads-btn mb-4">
+                <a href="mailto:{{ ads_detail.author.user.email }}" class="btn btn-common btn-reply"><i
+                        class="lni-envelope"></i> {{ ads_detail.author.user.email }}</a>
+                <a href="tel:{{ ads_detail.phone }}" class="btn btn-common"><i class="lni-phone-handset"></i>{{ ads_detail.phone }} </a>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+    <div class="row">
+        <div class="mb-2 ads-description">{{ ads_detail.description|safe }}</div>
+    </div>
+</div>
+</div>
+</div>
+
+{% endblock content %}

@@ -1,0 +1,116 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="{{ request.user.author.profile_pic.url }}" alt="avatar"
+              class="rounded img-fluid" style="width: 150px;">
+            <h5 class="my-3">{{user.username}}</h5>
+            <p><i class="lni-calendar"></i> Dołączył  {{ user.date_joined|date }}</p>
+          </div>
+        </div>
+        <div class="card mb-4 mb-lg-0">
+          <div class="card-body p-0">
+            <ul class="list-group list-group-flush rounded-3">
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="lni-cog"></i>
+                <a href="{% url 'profile-settings' %}">
+                <p class="mb-0">Ustawienia konta</p>
+                </a>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="lni-layers"></i>
+                <a href="{% url 'profile-ads' %}">
+                  <p class="mb-0">Moje ogłoszenia</p>
+                </a>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="lni-enter"></i>
+                <a href="{% url 'logout' %}">
+                  <p class="mb-0">Wyloguj się</p>
+                </a>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                <i class="lni-close"></i>
+                <a href="{% url 'profile-close' %}">
+                  <p class="mb-0">Usuń konto</p>
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-8">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="card mb-4 mb-md-0">
+              <div class="card-body">
+                <h4 class="mb-4">Usunąć konto?</h4>
+                <p>Jesteś pewny, że chcesz usunąć swoje konto? </p>
+                <label class="radio-inline">
+                <input name="inlineRadioOptions" value="option1" type="radio"> Tak
+                </label>
+                <label class="radio-inline">
+                <input name="inlineRadioOptions" value="option2" type="radio"> Nie
+                </label>
+                <br>
+                <button type="submit" class="btn btn-danger pt">Usuń</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+{% endblock content %}
+
+    <!-- Page Header Start -->
+    <div class="page-header" style="background: url({% static 'img/banner1.jpg' %});">
+      <div class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="breadcrumb-wrapper">
+              <h2 class="product-title">Close Account</h2>
+              <ol class="breadcrumb">
+                <li><a href="#">Home /</a></li>
+                <li class="current">Close</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Page Header End -->
+
+    <!-- Start Content -->
+    <div class="section-padding">
+      <div class="container">
+        <div class="row justify-content-center">
+          <div class="col-lg-5 col-md-12 col-xs-12">
+            <div class="login-area">
+              <h3><i class="lni-close"></i> Close account </h3>
+              <div class="close-account">
+                <p>You are sure you want to close your account?</p>
+                <label class="radio-inline">
+                <input name="inlineRadioOptions" value="option1" type="radio"> Yes
+                </label>
+                <label class="radio-inline">
+                <input name="inlineRadioOptions" value="option2" type="radio"> No
+                </label>
+                <br>
+                <button type="submit" class="btn btn-common pt">Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- End Content -->

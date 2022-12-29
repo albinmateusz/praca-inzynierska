@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Category Archive Section Start -->
+<section class="featured section-padding">
+  <div class="container">
+    <!--  ogloszenia w wojewodztwie-->
+    <div class="py-5 text-center">
+        <div class="container-fluid">
+            <h3 class="alert alert-light">Ogłoszenia w mieście: {{city.city_name}}</h3> <br>
+          <div class="row hidden-md-up">
+            {% if ads_by_city %}
+              {% for ads in ads_by_city %}
+              <div class="col-md-3" style="padding-bottom: 5px;">
+                  <div class="card" style="border: none;">
+                    <div class="card-block">
+                        {% for img in ads.adsimages_set.all %}
+                            {% if forloop.first %}
+                            <a href="{% url 'ads-detail' ads.id %}"><img class="img-responsive rounded mx-auto d-block" style="max-height:200px" src="{{ img.image.url }}" alt=""></a>
+                            {% endif %}
+                        {% endfor %}
+
+                        <div class="container ">
+                        <h5 class="card-title text-truncate">{{ads.title }}</h5>
+                        <p><i class="lni-user"></i> Ogloszenie dodał: {{ ads.author.user }}</p>
+                        <p><i class="lni-map-marker"></i> {{ ads.city }}, {{ ads.state }}</p>
+                      <p>Ogłoszenie dodano: {{ ads.date_created }}</p>
+                        <h4>Cena: {{ ads.price }} zł</h4>
+                            </div>
+                    </div>
+                  </div>
+             </div>
+              {% endfor %}
+            {% else %}
+            <div class="container">
+              <div class="col-lg-12">
+                <h4 class="text-center">Nie znaleziono ogłoszeń w tym mieście</h4>
+              </div>
+          </div>
+            {% endif %}
+
+          </div>
+        </div>
+    </div>
+    </div>
+  </div>
+</section>
+<!-- Category Archive Section End -->
+
+
+{% endblock content %}

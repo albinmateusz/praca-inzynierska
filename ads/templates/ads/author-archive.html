@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section style="background-color: #eee;">
+  <div class="container py-5">
+    <div class="row">
+      <div class="col-lg-4">
+        <div class="card mb-4">
+          <div class="card-body text-center">
+            <img src="{{ request.user.author.profile_pic.url }}" alt="avatar"
+              class="rounded img-fluid" style="width: 150px;">
+            <h5 class="my-3">{{author.user}}</h5>
+            <p><i class="lni-calendar"></i> Dołączył  {{ author.user.date_joined }}</p>
+          </div>
+        </div>
+
+      </div>
+      <div class="col-lg-8">
+        <div class="card mb-4">
+          <div class="card-body">
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Imię i nazwisko</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{author.user.first_name}} {{author.user.last_name}}</p>
+              </div>
+            </div>
+            <hr>
+            <div class="row">
+              <div class="col-sm-3">
+                <p class="mb-0">Adres e-mail</p>
+              </div>
+              <div class="col-sm-9">
+                <p class="text-muted mb-0">{{author.user.email}}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="card mb-4">
+          <div class="card-body">
+              <h5>Ogłoszenia dodane przez {{ author.user }} </h5>
+<div class="row">
+      {% if ads_by_author %}
+      {% for ads in ads_by_author %}
+        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+          <div class="featured-box">
+
+            <figure>
+              <a href="{% url 'ads-detail' ads.id %}">
+                  {% for img in ads.adsimages_set.all %}
+                  {% if forloop.first %}
+                      <img class="img-fluid" src="{{ img.image.url }}" alt="">
+                  {% endif %}
+                  {% endfor %}
+              </a>
+            </figure>
+
+            <div class="feature-content">
+              <h4><a href="{% url 'ads-detail' ads.id %}">{{ ads.title}}</a></h4>
+              <span>Dodano: {{ ads.date_created}}</span>
+              <ul class="address">
+                <li>
+                  <i class="lni-map-marker"></i>{{ ads.state}}
+                </li>
+                <li>
+                  <i class="lni-alarm-clock"></i>{{ ads.date_created | date}}
+                </li>
+                <li>
+                  <i class="lni-user"></i>{{ ads.author.user }}
+                </li>
+                <li>
+                  <i class="lni-package"></i>{{ ads.condition }}
+                </li>
+              </ul>
+              <div class="listing-bottom">
+                <h3 class="price float-left">{{ ads.price }} zł</h3>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+      {% else %}
+        <div class="container">
+          <div class="col-lg-12">
+            <h4 class="text-center">Nie znaleziono ogłoszeń tego użytkownika</h4>
+          </div>
+        </div>
+      {% endif %}
+    </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+
+{% endblock content %}

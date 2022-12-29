@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block content %}
+
+<!-- Page Header Start -->
+<div class="page-header" style="background: url(assets/img/banner1.jpg);">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="breadcrumb-wrapper">
+          <div style="margin-bottom:20px;"></div>
+          <h2 class="product-title">Wszystkie ogłoszenia</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
+<!-- Main container Start -->
+<div class="main-container section-padding">
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-4 col-md-12 col-xs-12 page-sidebar">
+        <aside>
+          <div class="widget categories">
+            <h4 class="widget-title">Wszystkie kategorie</h4>
+            <ul class="nav flex-column">
+                              {% for category in category_listing %}
+              <li class="nav-item">
+                <a href="{% url 'category-archive' category.slug %}">
+                  <i class="lni-folder"></i>
+                  {{ category }} <span class="category-counter">({{ category.total_ads }})</span>
+                </a>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </aside>
+      </div>
+      <div class="col-lg-8 col-md-12 col-xs-12 page-content">
+        <div class="adds-wrapper">
+
+          <div class="tab-content">
+            <div id="list-view" class="tab-pane fade active show">
+              <div class="row">
+                {% for ad_listing in ads_listing %}
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <div class="featured-box">
+                    <figure>
+
+                      <a href="{% url 'ads-detail' ad_listing.id %}">
+                        {% for img in ad_listing.adsimages_set.all %}
+                        {% if forloop.first %}
+                        <img class="img-fluid" src="{{ img.image.url }}" alt="">
+                        {% endif %}
+                        {% endfor %}
+
+                      </a>
+                    </figure>
+                    <div class="feature-content">
+                      <div class="product">
+                        <a href="{% url 'category-archive' ad_listing.category.slug %}"><i class="lni-folder"></i> {{ ad_listing.category }}</a>
+                      </div>
+                      <h4><a href="{% url 'ads-detail' ad_listing.id %}">{{ ad_listing.title }}</a></h4>
+                      <span>Dodane: {{ ad_listing.date_created }}</span>
+                      <ul class="address">
+                        <li>
+                          <i class="lni-map-marker"></i> {{ ad_listing.city }}, {{ ad_listing.state }}
+                        </li>
+                        <li>
+                          <i class="lni-alarm-clock"></i> {{ ad_listing.date_created|date }}
+                        </li>
+                        <li>
+                          <i class="lni-user"></i> {{ ad_listing.author.user }}
+                        </li>
+                        <li>
+                          <i class="lni-package"></i> {{ ad_listing.condition }}
+                        </li>
+                      </ul>
+                      <div class="listing-bottom">
+                        <h3 class="price float-left">{{ ad_listing.price }} zł</h3>
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Main container End -->
+
+{% endblock content %}

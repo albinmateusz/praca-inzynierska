@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<section style="background-color: #eee;">
+    <div class="container py-5">
+        {% if messages %}
+        <ul class="messages">
+            {% for message in messages %}
+            <li {% if message.tags %} class="{{ message.tags }} alert alert-success" {% endif %}>{{ message }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="card mb-4">
+                    <div class="card-body text-center">
+                        <img src="{{ request.user.author.profile_pic.url }}" alt="avatar"
+                             class="rounded img-fluid" style="width: 150px;">
+                        <h5 class="my-3">{{user.username}}</h5>
+                        <p><i class="lni-calendar"></i> Dołączył {{ user.date_joined|date }}</p>
+                    </div>
+                </div>
+                <div class="card mb-4 mb-lg-0">
+                    <div class="card-body p-0">
+                        <ul class="list-group list-group-flush rounded-3">
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <i class="lni-cog"></i>
+                                <a href="{% url 'profile-settings' %}">
+                                    <p class="mb-0">Ustawienia konta</p>
+                                </a>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <i class="lni-layers"></i>
+                                <a href="{% url 'profile-ads' %}">
+                                    <p class="mb-0">Moje ogłoszenia</p>
+                                </a>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <i class="lni-enter"></i>
+                                <a href="{% url 'logout' %}">
+                                    <p class="mb-0">Wyloguj się</p>
+                                </a>
+                            </li>
+                            <li class="list-group-item d-flex justify-content-between align-items-center p-3">
+                                <i class="lni-close"></i>
+                                <a href="{% url 'profile-close' %}">
+                                    <p class="mb-0">Usuń konto</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card mb-4 mb-md-0">
+                            <div class="card-body">
+                                <h4 class="mb-4">Twoje ogłoszenia <span
+                                        class="badge badge-primary">{{ total_ads }}</span></h4>
+                                {% if ads_posted %}
+
+                                <table class="table table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col">Tytuł</th>
+                                        <th scope="col">Kategoria</th>
+                                        <th scope="col">Cena</th>
+                                        <th scope="col">Data dodania</th>
+                                        <th scope="col">Status</th>
+                                        <th scope="col">Akcja</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for ad in ads_posted %}
+                                    <tr>
+                                        <td>{{ad.title}}</td>
+                                        <td>{{ad.category}}</td>
+                                        <td>{{ad.price}} zł</td>
+                                        <td>{{ ad.date_created }}</td>
+                                        <td>
+                                            {% if ad.is_active %}
+                                            <span class="adstatus adstatusactive">Aktywne</span>
+                                            {% else %}
+                                            <span class="adstatus adstatusinactive">Nieaktywne</span>
+                                            {% endif %}
+                                        </td>
+                                        <td>
+                                            <div class="btns-actions">
+                                                <a class="btn-action" href="{% url 'ads-detail' pk=ad.pk %}"><i
+                                                        class="lni-eye"></i></a>
+                                                <a class="btn-action btn-edit" href="{% url 'ads-edit' pk=ad.pk %}"><i
+                                                        class="lni-pencil"></i></a>
+                                                <a class="btn-action btn-delete" href="{% url 'ads-delete' pk=ad.pk %}"><i
+                                                        class="lni-trash"></i></a>
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+{% endblock content %}

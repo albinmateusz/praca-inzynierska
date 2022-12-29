@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="margin" style="margin-top: 50px;"></div>
+
+<div class="container">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Udało się!</h4>
+        <p>Twoje ogłoszenie zostało dodane i czeka na akceptacje administratora</p>
+        <hr>
+        <p><a href="{% url 'home' %}">Wróć do strony głównej</a></p>
+      </div>
+
+</div>
+
+
+{% endblock %}

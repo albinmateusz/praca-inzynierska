@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<div class="margin" style="margin-top: 50px;"></div>
+
+<div class="container">
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Udało się!</h4>
+        <p>Twoje konto zostało utworzone</p>
+        <hr>
+        <p><a href="{% url 'login' %}">Zaloguj się</a></p>
+    </div>
+
+</div>
+
+
+{% endblock %}
+

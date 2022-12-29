@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+<!-- Jumbotron - wyszukiwanie ogloszen -->
+<div class="jumbotron">
+    <div class="container-fluid">
+        <h1 class="display-3">Ogłoszenia lokalne</h1>
+        <p><b>Ogłoszenie w zasięgu ręki.</b> Użyj wyszukiwarki i znajdź coś dla siebie już dziś!</p>
+        <section class="search-sec">
+            <div class="container-fluid">
+                <form method="GET" class="search-form" action="{% url 'ads-search' %}">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="row">
+                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                    <input name="title_name" type="text" class="form-control search-slt"
+                                           placeholder="{{ads_quantity}} ogłoszeń blisko Ciebie">
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                    <select class="form-control search-slt" name="state_name">
+                                        <option selected="selected" value="">Cała Polska</option>
+                                        {% for state_name in state_search %}
+                                        <option value="{{ state_name }}">{{ state_name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <!--                                  <div class="col-lg-3 col-md-3 col-sm-12 p-0">-->
+                                <!--                                      <select class="form-control search-slt" name="category_name">-->
+                                <!--                                          <option selected="selected" value="">Wszystkie kategorie</option>-->
+                                <!--                                          {% for category_name in category_search %}-->
+                                <!--                                          <option value="{{ category_name }}">{{ category_name }}</option>-->
+                                <!--                                          {% endfor %}-->
+                                <!--                                      </select>-->
+                                <!--                                  </div>-->
+                                <div class="col-lg-3 col-md-3 col-sm-12 p-0">
+                                    <button type="submit" class="btn btn-primary">Szukaj</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </section>
+    </div>
+</div>
+<!-- Jumbotron - wyszukiwanie ogloszen - koniec -->
+<!-- Widok kategorii -->
+<div class="container-fluid text-center">
+    <h3 class="alert alert-primary">Kategorie</h3> <br>
+    <div class="row row-cols-1 row-cols-md-2 g-2">
+        {% for category in category_listing %}
+
+        <div class="col-md-3" style="border: none;">
+            <div class="card" style="border: none;">
+                <div class="card-body">
+                    <a href="{% url 'category-archive' category.slug %}">
+                        <img src="images/{{category.category_image}}" class="rounded-circle mx-auto d-block"
+                             style="background: #e6e6e6; height: 50px; width:50px;" alt="...">
+                        <p class="card-title text-center">{{ category }}</p>
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        {% endfor %}
+    </div>
+</div>
+<!-- Widok kategorii - koniec -->
+
+<!-- Wyroznione ogloszenia -->
+<div class="py-5 text-center">
+    <div class="container-fluid">
+        <h3 class="alert alert-danger">Wyróznione ogłoszenia</h3> <br>
+        <div class="row hidden-md-up">
+            {% for featured_ad in featured_ads %}
+            <div class="col-md-3" style="padding-bottom: 5px;">
+                <div class="card" style="border: none;">
+                    <p class="card-text p-y-1"><i class="lni-folder"></i> <span style="font-weight:bold;">{{ featured_ad.category }}</span>
+                    </p>
+                    <div class="card-block">
+                        {% for img in featured_ad.adsimages_set.all %}
+                        {% if forloop.first %}
+                        <a href="{% url 'ads-detail' featured_ad.id %}"><img
+                                class="img-responsive rounded mx-auto d-block" style="max-height:200px"
+                                src="{{ img.image.url }}" alt=""></a>
+                        {% endif %}
+                        {% endfor %}
+
+                        <div class="container ">
+                            <h5 class="card-title text-truncate">{{featured_ad.title }}</h5>
+                            <p><i class="lni-user"></i> Ogloszenie dodał: <a href="{% url 'author-archive' featured_ad.author.id %}"> {{ featured_ad.author.user }}</a></p>
+                            <p><i class="lni-map-marker"></i> {{ featured_ad.city }}, {{ featured_ad.state }}</p>
+                            <p>Ogłoszenie dodano: {{ featured_ad.date_created }}</p>
+                            <h4>Cena: {{ featured_ad.price }} zł</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- Wyroznione ogloszenia - koniec -->
+
+<!-- Ostatnie ogloszenia -->
+<div class="py-5 text-center">
+    <div class="container-fluid">
+        <h3 class="alert alert-light">Ostatnio dodane</h3> <br>
+        <div class="row hidden-md-up">
+            {% for recent_ad in recent_ads %}
+            <div class="col-md-3" style="padding-bottom: 5px;">
+                <div class="card" style="border: none;">
+                    <p class="card-text p-y-1"><i class="lni-folder"></i> <span style="font-weight:bold;">{{ recent_ad.category }}</span></p>
+                    <div class="card-block">
+                        {% for img in recent_ad.adsimages_set.all %}
+                        {% if forloop.first %}
+                        <a href="{% url 'ads-detail' recent_ad.id %}"><img
+                                class="img-responsive rounded mx-auto d-block" style="max-height:200px"
+                                src="{{ img.image.url }}" alt=""></a>
+                        {% endif %}
+                        {% endfor %}
+
+                        <div class="container ">
+                            <h5 class="card-title text-truncate">{{recent_ad.title }}</h5>
+                            <p><i class="lni-user"></i> Ogloszenie dodał: <a
+                                    href="{% url 'author-archive' recent_ad.author.id %}"> {{ recent_ad.author.user }}</a></p>
+                            <p><i class="lni-map-marker"></i> {{ recent_ad.city }}, {{ recent_ad.state }}</p>
+                            <p>Ogłoszenie dodano: {{ recent_ad.date_created }}</p>
+                            <h4>Cena: {{ recent_ad.price }} zł</h4>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+<!-- ostatnie - koniec -->
+
+{% endblock content %}

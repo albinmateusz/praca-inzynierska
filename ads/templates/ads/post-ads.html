@@ -1,0 +1,262 @@
+{% extends "base.html" %}
+{% load static %}
+{% block content %}
+
+<!-- Page Header Start -->
+
+<div class="page-header" style="background: url('img/banner1.jpg');">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="breadcrumb-wrapper">
+            <div style="margin-bottom:20px;"></div>
+          <h2 class="product-title">Dodaj ogłoszenie</h2>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- Page Header End -->
+
+<!-- Start Content -->
+<div id="content" class="section-padding">
+  <div class="container">
+    <div class="row justify-content-center">
+
+      <div class="col-lg-5 col-md-12 col-xs-12">
+        {% if request.user.is_authenticated %}
+        <div class="row page-content">
+          <form action="{{ads}}" class="ads-form" id="ad-post-form">
+            <label>Tytuł ogłoszenia <span class="req-aseteric">*</span></label>
+            <input type="text" id="title" class="form-control"
+              placeholder="np. BMW 3GT X-DRIVE 190 hp.">
+            <div class="error-msg">
+              <div id="titlemsg"></div>
+            </div>
+
+            <label>Opis produktu <span class="req-aseteric">*</span></label>
+            <textarea rows="10" id="description" class="form-control"
+              placeholder="Opis produktu"></textarea>
+            <div class="error-msg">
+              <div id="descriptionmsg"></div>
+            </div>
+
+            <label>Wybierz odpowiednią kategorię <span class="req-aseteric">*</span></label>
+            <div class="select ad-post-form">
+              <select id="category" name="category" class="form-control">
+              {% for category_name in category_list %}
+              <option value="{{ category_name }}">{{ category_name }}</option>
+              {% endfor %}
+              </select>
+            </div>
+            <div class="error-msg">
+              <div id="categorymsg"></div>
+            </div>
+
+            <label>Cena <span class="req-aseteric">*</span></label>
+            <input type="number" id="price" class="form-control" placeholder="np. 1500">
+            <div class="error-msg">
+              <div id="pricemsg"></div>
+            </div>
+
+            <label>Stan <span class="req-aseteric">*</span></label>
+            <div class="select ad-post-form">
+              <select id="condition" name="condition" class="form-control">
+              <option value="Nowy">Nowy</option>
+              <option value="Używany">Używany</option>
+              <option value="Używany">Uszkodzony</option>
+              </select>
+            </div>
+            <div class="error-msg">
+              <div id="conditionmsg"></div>
+            </div>
+
+            <label>Województwo <span class="req-aseteric">*</span></label>
+            <div class="select ad-post-form">
+              <select id="state" name="state" class="form-control">
+                <option value="pomorskie">pomorskie</option>
+                <option value="zachodnio-pomorskie">zachodnio-pomorskie</option>
+                <option value="warmińsko-mazurskie">warmińsko-mazurskie</option>
+                <option value="podlaskie">podlaskie</option>
+                <option value="mazowieckie">mazowieckie</option>
+                <option value=kujawsko-pomorskie">kujawsko-pomorskie</option>
+                <option value="wielkopolskie">wielkopolskie</option>
+                <option value="lubuskie">lubuskie</option>
+                <option value="dolnośląskie">dolnośląskie</option>
+                <option value="łódzkie">łódzkie</option>
+                <option value="mazowieckie">mazowieckie</option>
+                <option value="lubelskie">lubelskie</option>
+                <option value="świętokrzyskie">świętokrzyskie</option>
+                <option value="śląskie">śląskie</option>
+                <option value="dolnośląskie">dolnośląskie</option>
+                <option value="opolskie">opolskie</option>
+                <option value="śląskie">śląskie</option>
+                <option value="małopolskie">małopolskie</option>
+                <option value="podkarpackie">podkarpackie</option>
+              </select>
+            </div>
+            <div class="error-msg">
+              <div id="statemsg"></div>
+            </div>
+
+            <label>Twoje miasto<span class="req-aseteric">*</span></label>
+            <input type="text" id="city" class="form-control" placeholder="np. Gdańsk">
+            <div class="error-msg">
+              <div id="citymsg"></div>
+            </div>
+
+            <label>Firma/marka<span class="h-text">(Pole niewymagane)</span></label>
+            <input type="text" id="brand" class="form-control ad-post-form" placeholder="np. Nike">
+            <div class="error-msg">
+              <div id="brandmsg"></div>
+            </div>
+
+            <label>Numer telefonu <span class="req-aseteric">*</span></label>
+            <input type="text" id="phone" class="form-control ad-post-form" placeholder="Twój numer telefonu">
+            <div class="error-msg">
+              <div id="phonemsg"></div>
+            </div>
+
+            <label>Zdjęcie produktu <span class="h-text"> (Max. 5 zdjęć. Plik powinien zajmować mniej niż 3MB.</span></label>
+
+            <input type="file" multiple>
+            <div style="margin-top:100px;">
+              <button type="button" id="saveBtn" class="btn btn-primary log-btn">Dodaj ogłoszenie</button>
+            </div>
+
+          </form>
+
+        </div>
+
+        <div class="success-msg">
+          <div id="formsuccessmsg" class="text-center"></div>
+        </div>
+
+        <div class="error-msg">
+          <div id="formerrmsg" class="text-center"></div>
+        </div>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Content -->
+
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var files = []
+    FilePond.registerPlugin(FilePondPluginFileValidateSize);
+    FilePond.registerPlugin(FilePondPluginFileValidateType);
+    FilePond.setOptions({
+      allowMultiple: true,
+      maxFiles: 5,
+      maxFileSize: '3MB'
+    })
+    const inputElement = document.querySelector('input[type="file"]');
+    const pond = FilePond.create(inputElement, {
+      acceptedFileTypes: ['image/png', 'image/jpeg'],
+      onaddfile: (err, fileItem) => {
+        if (!err) {
+          files.push(fileItem.file)
+        }
+        console.log(files)
+      },
+      onremovefile: (err, fileItem) => {
+        const index = files.indexOf(fileItem.file)
+        if (index > -1) {
+          files.splice(index, 1)
+        }
+        console.log(files)
+      }
+    });
+
+    var formData = new FormData();
+    $(document).on('click', '#saveBtn', function (e) {
+      event.preventDefault();
+
+      if ($('#title').val() === "") {
+        $("#titlemsg").html("<div class='alert alert-danger'>Pole tytuł nie może być puste</div>");
+      }
+
+      if ($('#description').val() === "") {
+        $("#descriptionmsg").html("<div class='alert alert-danger'>Pole opis nie może być puste</div>");
+      }
+
+      if ($('#category').val() === "") {
+        $("#categorymsg").html("<div class='alert alert-danger'>Pole kategoria nie może być puste</div>");
+      }
+
+      if ($('#price').val() === "") {
+        $("#pricemsg").html("<div class='alert alert-danger'>Pole cena nie może być puste i musi być liczbą</div>");
+      }
+
+      if ($('#condition').val() === "") {
+        $("#conditionmsg").html("<div class='alert alert-danger'>Pole stan nie może być puste</div>");
+      }
+
+      if ($('#state').val() === "") {
+        $("#statemsg").html("<div class='alert alert-danger'>Pole województwo nie może być puste</div>");
+      }
+
+      if ($('#city').val() === "") {
+        $("#citymsg").html("<div class='alert alert-danger'>Pole miasto nie może być puste/div>");
+      }
+
+      if ($('#phone').val() === "") {
+        $("#phonemsg").html("<div class='alert alert-danger'>Pole telefon nie może być puste</div>");
+      }
+
+
+      formData.append('length', files.length)
+      formData.append('title', $('#title').val())
+      formData.append('description', $('#description').val())
+      formData.append('category', $('#category').val())
+      formData.append('price', $('#price').val())
+      formData.append('condition', $('#condition').val())
+      formData.append('state', $('#state').val())
+      formData.append('city', $('#city').val())
+      formData.append('brand', $('#brand').val())
+      formData.append('phone', $('#phone').val())
+      for (var i = 0; i < files.length; i++) {
+        formData.append('images' + i, files[i])
+      }
+
+
+      formData.append('csrfmiddlewaretoken', '{{ csrf_token }}')
+
+      $.ajax({
+        type: 'POST',
+        url: '{% url "post-ads" %}',
+        data: formData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        enctype: 'multipart/form-data',
+        success: function () {
+          $("#formsuccessmsg").html(
+          "<div class='alert alert-success'>Ogłoszenie dodane i czeka na akceptacje admina</div>"
+          );
+          // alert('The Ads has been posted successfully!')
+          $('#ad-post-form').each(function () {
+          this.reset(); //Here form fields will be cleared.
+          window.location='success'
+          });
+
+        },
+        error: function (xhr, errmsg, err) {
+          $("#formerrmsg").html(
+            "<div class='alert alert-danger'>Wystąpił jeden lub więcej błędów. Proszę sprawdzić wszystkie wymagane pola przed dodaniem ogłoszenia.</div>"
+          );
+          // console.log(xhr.status + ":" + xhr.responseText)
+          // alert('Nie dodano. Upewnij się, że uzupełniłeś wszystkie pola')
+
+
+        }
+      })
+    })
+    console.log(formData)
+  })
+</script>
+
+
+{% endblock content %}
