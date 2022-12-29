@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'debug_toolbar',
     'ckeditor',
     'ckeditor_uploader',
-    'froala_editor'
+    'froala_editor',
+    'gunicorn',
 
 ]
 
